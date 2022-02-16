@@ -2,6 +2,7 @@ library dropdown_search;
 
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_search/src/properties/selection_list_view_props.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -217,6 +218,9 @@ class DropdownSearch<T> extends StatefulWidget {
   ///show or hide favorites items
   final bool showFavoriteItems;
 
+  ///show selected item(only in _defaultSelectedItemWidget)
+  final bool showSelectedItem;
+
   ///to customize favorites chips
   final FavoriteItemsBuilder<T>? favoriteItemBuilder;
 
@@ -326,7 +330,7 @@ class DropdownSearch<T> extends StatefulWidget {
     this.popupElevation = 8,
     this.selectionListViewProps = const SelectionListViewProps(),
     this.focusNode,
-    this.positionCallback,
+    this.positionCallback, this.showSelectedItem = true,
   })  : assert(!showSelectedItems || T == String || compareFn != null),
         this.searchFieldProps = searchFieldProps ?? TextFieldProps(),
         this.isMultiSelectionMode = false,
@@ -406,7 +410,7 @@ class DropdownSearch<T> extends StatefulWidget {
     this.popupElevation = 8,
     this.selectionListViewProps = const SelectionListViewProps(),
     this.focusNode,
-    this.positionCallback,
+    this.positionCallback, this.showSelectedItem = true,
   })  : assert(!showSelectedItems || T == String || compareFn != null),
         this.searchFieldProps = searchFieldProps ?? TextFieldProps(),
         this.onChangedMultiSelection = onChanged,
@@ -485,10 +489,11 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Theme.of(context).primaryColorLight),
-        child: Text(
+        child: AutoSizeText(
           _selectedItemAsString(item),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.subtitle2,
+          maxLines: 1,
         ),
       );
     }
@@ -538,7 +543,7 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
       autovalidateMode: widget.autoValidateMode,
       initialValue: widget.selectedItem,
       builder: (FormFieldState<T> state) {
-        if (state.value != getSelectedItem) {
+        if (widget.showSelectedItem == true && state.value != getSelectedItem) {
           WidgetsBinding.instance!.addPostFrameCallback((_) {
             state.didChange(getSelectedItem);
           });
