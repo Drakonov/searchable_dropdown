@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_search/src/properties/selection_list_view_props.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -498,7 +499,7 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
           )
         : ListTile(
             enabled: !_isDisabled(item),
-            title: Text(_selectedItemAsString(item)),
+            title: AutoSizeText(_selectedItemAsString(item),maxLines: 1,),
             selected: !widget.showSelectedItems ? false : _isSelectedItem(item),
             onTap: _isDisabled(item) ? null : () => _handleSelectedItem(item),
           );
