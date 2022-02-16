@@ -330,7 +330,8 @@ class DropdownSearch<T> extends StatefulWidget {
     this.popupElevation = 8,
     this.selectionListViewProps = const SelectionListViewProps(),
     this.focusNode,
-    this.positionCallback, this.showSelectedItem = true,
+    this.positionCallback,
+    this.showSelectedItem = true,
   })  : assert(!showSelectedItems || T == String || compareFn != null),
         this.searchFieldProps = searchFieldProps ?? TextFieldProps(),
         this.isMultiSelectionMode = false,
@@ -410,7 +411,8 @@ class DropdownSearch<T> extends StatefulWidget {
     this.popupElevation = 8,
     this.selectionListViewProps = const SelectionListViewProps(),
     this.focusNode,
-    this.positionCallback, this.showSelectedItem = true,
+    this.positionCallback,
+    this.showSelectedItem = true,
   })  : assert(!showSelectedItems || T == String || compareFn != null),
         this.searchFieldProps = searchFieldProps ?? TextFieldProps(),
         this.onChangedMultiSelection = onChanged,
@@ -516,8 +518,11 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
               .toList(),
         );
       }
-      return Text(_selectedItemAsString(getSelectedItem),
-          style: Theme.of(context).textTheme.subtitle1);
+      return AutoSizeText(
+        _selectedItemAsString(getSelectedItem),
+        style: Theme.of(context).textTheme.subtitle1,
+        maxLines: 1,
+      );
     }
 
     return Row(
@@ -575,7 +580,7 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
       autovalidateMode: widget.autoValidateMode,
       initialValue: widget.selectedItems,
       builder: (FormFieldState<List<T>> state) {
-        if (state.value != getSelectedItems) {
+        if (widget.showSelectedItem == true && state.value != getSelectedItems) {
           WidgetsBinding.instance!.addPostFrameCallback((_) {
             state.didChange(getSelectedItems);
           });
